@@ -22,6 +22,30 @@ connection.open(function(error, conn) {
           last: 'Bretz'
         },
         team: 'Project Development'
+      },
+      {
+        id: '1000022',
+        name: {
+          first: 'Matt',
+          last: 'Liegey'
+        },
+        team: 'Show Clix'
+      },
+      {
+        id: '1000025',
+        name: {
+          first: 'TJ',
+          last: 'Fontane'
+        },
+        team: 'Node'
+      },
+      {
+        id: '1000030',
+        name: {
+          first: 'Sarah',
+          last: 'Gay'
+        },
+        team: 'API'
       }
     ]
   };
