@@ -19,7 +19,9 @@ app.config(function($routeProvider) {
     .when('/employees/:employeeId', {
       templateUrl: 'employee.html',
       controller: 'EmployeeCtrl'
-    });
+    }).otherwise({
+      redirectTo: '/employees'
+    });;
 });
 
 app.controller('EmployeesCtrl', function($scope, $http) {

@@ -9,17 +9,31 @@ body.container {
 }
 
 
-.employee-list-item .panel-body > div {
-
+.employee-list-item .panel-body {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: box;
+  display: flex;
 }
 
-.employee-list-item .panel-body > div > * {
+.employee-list-item .panel-body > * {
+  -webkit-align-self: center;
+  align-self: center;
+  -ms-flex-item-align: center;
+}
 
+.employee-list-item .panel-body .btn {
+  margin-left: auto;
 }
 
 span.icon-container {
   display: inline-block;
-  width: 32px;
-  height: 32px;
-  border: 1px solid black;
+  text-align: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid #ecf0f1;
+  margin-right: 15px;
+  border-radius: 4px;
 }

@@ -9,10 +9,10 @@
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
   </head>
   <body class="container">
-    <div ng-controller="HomeCtrl">
-      <a class="btn btn-primary" href="#">Home</a>
-      <a class="btn btn-primary" href="#employees">Employees</a>
-    </div>
+    <ul class="nav nav-pills">
+      <li class="active"><a href="#">Home</a></li>
+      <li><a href="#/employees">Employees</a></li>
+    </ul>
     <br>
     <div ng-view></div>
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.16/angular.js"></script>
