@@ -4,10 +4,9 @@ body {
   min-width: 320px;
 }
 
-body.container {
-  margin-top: 10px;
+ul.nav.nav-pills {
+  margin: 10px 0;
 }
-
 
 .employee-list-item .panel-body {
   display: -webkit-box;
