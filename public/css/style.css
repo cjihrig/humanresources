@@ -6,6 +6,7 @@ body {
 
 ul.nav.nav-pills {
   margin: 10px 0;
+  background-color: #fff;
 }
 
 .employee-list-item .panel-body {
@@ -32,7 +33,7 @@ span.icon-container {
   text-align: center;
   width: 48px;
   height: 48px;
-  border: 1px solid #ecf0f1;
+  border: 1px solid #3498db;
   margin-right: 15px;
   border-radius: 4px;
 }
