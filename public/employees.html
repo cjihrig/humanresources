@@ -1,3 +1,10 @@
-<div ng-repeat="employee in employees">
-  <a href="#employees/{{employee.id}}">{{employee.name.last}}, {{employee.name.first}}</a>
+<div class="col-xs-12 col-sm-6 col-lg-4" ng-repeat="employee in employees">
+  <div class="panel panel-default employee-list-item">
+    <div class="panel-body">
+      <div>
+        <span class="icon-container"></span>
+        <span class="h4">{{employee.name.last}}, {{employee.name.first}}</span>
+        <a href="#employees/{{employee.id}}" class="btn btn-primary"></a>
+      </div>
+  </div>
 </div>

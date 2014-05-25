@@ -1,8 +1,25 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: url('/images/background.png');
+  background-repeat: repeat;
+  min-width: 320px;
 }
 
-a {
-  color: #00B7FF;
+body.container {
+  margin-top: 10px;
+}
+
+
+.employee-list-item .panel-body > div {
+
+}
+
+.employee-list-item .panel-body > div > * {
+
+}
+
+span.icon-container {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border: 1px solid black;
 }
