@@ -2,11 +2,7 @@
 
 var app = angular.module('app', ['ngRoute']);
 
-app.controller('HomeCtrl', function($scope, $route, $routeParams, $location) {
-  $scope.message = 'OK!';
-});
-
-app.config(function($routeProvider) {
+app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
     .when('/', {
       templateUrl: 'home.html',
@@ -21,10 +17,16 @@ app.config(function($routeProvider) {
       controller: 'EmployeeCtrl'
     }).otherwise({
       redirectTo: '/employees'
-    });;
-});
+    });
+}]);
 
-app.controller('EmployeesCtrl', function($scope, $http) {
+
+app.controller('HomeCtrl', ['$scope', function($scope) {
+  $scope.message = 'OK!';
+}]);
+
+
+app.controller('EmployeesCtrl', ['$scope', '$http', function($scope, $http) {
   $http({
     method: 'GET',
     url: '/employees'
@@ -33,9 +35,9 @@ app.controller('EmployeesCtrl', function($scope, $http) {
   }).error(function(data, status, headers, config) {
     // TODO: Handle error
   });
-});
+}]);
 
-app.controller('EmployeeCtrl', function($scope, $routeParams, $http) {
+app.controller('EmployeeCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
   $http({
     method: 'GET',
     url: '/employees/' + $routeParams.employeeId
@@ -44,4 +46,4 @@ app.controller('EmployeeCtrl', function($scope, $routeParams, $http) {
   }).error(function(data, status, headers, config) {
     // TODO: Handle error
   });
-});
+}]);
