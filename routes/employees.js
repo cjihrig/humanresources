@@ -1,45 +1,74 @@
+var async = require('async');
 var express = require('express');
+var connection = require('../lib/connection');
+var employee = require('../models/employee')
 var router = express.Router();
 
-var data = {
-  employees: [
-    {
-      id: '1000003',
-      name: {
-        first: 'Colin',
-        last: 'Ihrig'
-      },
-      team: 'Software and Services Group'
-    },
-    {
-      id: '1000021',
-      name: {
-        first: 'Adam',
-        last: 'Bretz'
-      },
-      team: 'Project Development'
-    }
-  ]
-};
-
 router.get('/employees', function(req, res, next) {
-  res.json({
-    employees: data.employees
+  var retrieve = function(conn, callback) {
+    var Employee = employee.getModel(conn);
+
+    Employee.find({}, function(error, results) {
+      callback(error, conn, results);
+    });
+  };
+
+  async.waterfall([
+    connection.open,
+    retrieve
+  ], function(error, conn, results) {
+    // Close connection first
+    if (conn) {
+      conn.close();
+    }
+
+    // Handle error
+    if (error) {
+      // TODO: Handle error
+    }
+
+    // Respond with valid data
+    res.json({
+      employees: results
+    });
   });
 });
 
 router.get('/employees/:employeeId', function(req, res, next) {
-  var employeeId = req.params.employeeId;
-  var employee = (data.employees.filter(function(employee) {
-        if (employee.id === employeeId) {
-          return true;
-        }
+  var retrieve = function(conn, callback) {
+    var Employee = employee.getModel(conn);
+    var employeeId = req.params.employeeId;
 
-        return false;
-      }) || [])[0];
+    Employee.findOne({
+      id: employeeId
+    }, function(error, results) {
+      callback(error, conn, results);
+    });
+  };
 
-  res.json({
-    employee: employee
+  async.waterfall([
+    connection.open,
+    retrieve
+  ], function(error, conn, results) {
+    // Close connection first
+    if (conn) {
+      conn.close();
+    }
+
+    // Handle error
+    if (error) {
+      // TODO: Handle error
+    }
+
+    // If valid user was not found, send 404
+    if (!results) {
+      res.send(404);
+    }
+
+    // Respond with valid data
+    res.json({
+      employee: results
+    });
   });
 });
 
