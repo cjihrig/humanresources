@@ -30,15 +30,15 @@ connection.open(function(error, conn) {
           first: 'Matt',
           last: 'Liegey'
         },
-        team: 'Show Clix'
+        team: 'Project Development'
       },
       {
         id: '1000025',
         name: {
-          first: 'TJ',
-          last: 'Fontane'
+          first: 'Aleksey',
+          last: 'Smolenchuk'
         },
-        team: 'Node',
+        team: 'Software and Services Group',
         image: 'images/employees/1000025.png' /* invalid image */
       },
       {
@@ -47,7 +47,15 @@ connection.open(function(error, conn) {
           first: 'Sarah',
           last: 'Gay'
         },
-        team: 'API'
+        team: 'Project Development'
+      },
+      {
+        id: '1000031',
+        name: {
+          first: 'Dave',
+          last: 'Beshero'
+        },
+        team: 'Project Development'
       }
     ]
   };
