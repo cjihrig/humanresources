@@ -1,6 +1,18 @@
-<a href="#employees">&lt;&lt; Employees</a><br>
-<br>
-Employee ID #{{employee.id}}<br>
-First Name: {{employee.name.first}}<br>
-Last Name: {{employee.name.last}}<br>
-Team: {{employee.team}}
+<ul class="breadcrumb">
+  <li><a href="#employees">Employees</a></li>
+  <li class="active">{{employee.name.last}}, {{employee.name.first}}</li>
+</ul>
+<div class="col-xs-12 col-sm-4">
+  <div>
+    <img ng-src="{{employee.image || 'images/user.png'}}" image-fallback="images/user.png" class="employee-avatar">
+  </div>
+  <div>
+    <span class="h3">{{employee.name.first}} {{employee.name.last}}</span>
+  </div>
+</div>
+<div class="col-xs-12 col-sm-8">
+  Employee ID #{{employee.id}}<br>
+  First Name: {{employee.name.first}}<br>
+  Last Name: {{employee.name.last}}<br>
+  Team: {{employee.team}}
+</div>

@@ -13,7 +13,8 @@ connection.open(function(error, conn) {
           first: 'Colin',
           last: 'Ihrig'
         },
-        team: 'Software and Services Group'
+        team: 'Software and Services Group',
+        image: 'images/employees/1000003.png'
       },
       {
         id: '1000021',
@@ -21,7 +22,8 @@ connection.open(function(error, conn) {
           first: 'Adam',
           last: 'Bretz'
         },
-        team: 'Project Development'
+        team: 'Project Development',
+        image: null
       },
       {
         id: '1000022',
@@ -29,7 +31,8 @@ connection.open(function(error, conn) {
           first: 'Matt',
           last: 'Liegey'
         },
-        team: 'Show Clix'
+        team: 'Show Clix',
+        image: null
       },
       {
         id: '1000025',
@@ -37,7 +40,8 @@ connection.open(function(error, conn) {
           first: 'TJ',
           last: 'Fontane'
         },
-        team: 'Node'
+        team: 'Node',
+        image: 'images/employees/1000025.png'
       },
       {
         id: '1000030',
@@ -45,7 +49,8 @@ connection.open(function(error, conn) {
           first: 'Sarah',
           last: 'Gay'
         },
-        team: 'API'
+        team: 'API',
+        image: null
       }
     ]
   };

@@ -28,6 +28,12 @@ ul.nav.nav-pills {
   margin-left: auto;
 }
 
+.employee-avatar {
+  height: 200px;
+  width: 200px;
+  border-radius: 6px;
+}
+
 span.icon-container {
   display: inline-block;
   text-align: center;
