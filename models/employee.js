@@ -6,7 +6,11 @@ var EmployeeSchema = new Schema({
     first: String,
     last: String
   },
-  team: String
+  team: String,
+  image: {
+    type: String,
+    default: 'images/user.png'
+  }
 });
 var getModel = function(connection) {
   return connection.model('Employee', EmployeeSchema);

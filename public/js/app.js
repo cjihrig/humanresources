@@ -2,6 +2,7 @@
 
 var app = angular.module('app', ['ngRoute']);
 
+
 app.config(['$routeProvider', function($routeProvider) {
   $routeProvider
     .when('/', {
@@ -15,7 +16,8 @@ app.config(['$routeProvider', function($routeProvider) {
     .when('/employees/:employeeId', {
       templateUrl: 'employee.html',
       controller: 'EmployeeCtrl'
-    }).otherwise({
+    })
+    .otherwise({
       redirectTo: '/employees'
     });
 }]);
@@ -37,6 +39,7 @@ app.controller('EmployeesCtrl', ['$scope', '$http', function($scope, $http) {
   });
 }]);
 
+
 app.controller('EmployeeCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
   $http({
     method: 'GET',
@@ -47,3 +50,14 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', '$http', function($sco
     // TODO: Handle error
   });
 }]);
+
+
+app.directive('imageFallback', function() {
+  return {
+    link: function(scope, elem, attrs) {
+      elem.bind('error', function() {
+        angular.element(this).attr('src', attrs.imageFallback);
+      });
+    }
+  };
+});

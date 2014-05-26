@@ -13,7 +13,8 @@ connection.open(function(error, conn) {
           first: 'Colin',
           last: 'Ihrig'
         },
-        team: 'Software and Services Group'
+        team: 'Software and Services Group',
+        image: 'images/employees/1000003.png'
       },
       {
         id: '1000021',
@@ -37,7 +38,8 @@ connection.open(function(error, conn) {
           first: 'TJ',
           last: 'Fontane'
         },
-        team: 'Node'
+        team: 'Node',
+        image: 'images/employees/1000025.png' /* invalid image */
       },
       {
         id: '1000030',
