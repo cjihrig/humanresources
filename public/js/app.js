@@ -22,32 +22,49 @@ app.config(['$routeProvider', function($routeProvider) {
     });
 }]);
 
+app.factory('EmployeeService', ['$http', function($http) {
+  var exports = {};
+
+  function _handleError(data, status, headers, config) {
+    // TODO: do something here... Probably just redirect to an error page
+    console.log('%c ' + JSON.stringify(data), 'color:red');
+  }
+
+  function getEmployees() {
+    return $http({
+      method: 'GET',
+      url: '/employees'
+    }).error(_handleError);
+  }
+
+  function getEmployee(id) {
+    return $http({
+      method: 'GET',
+      url: '/employees/' + id
+    }).error(_handleError);
+  }
+
+  exports.list = getEmployees;
+  exports.employee = getEmployee;
+
+  return exports;
+
+}])
 
 app.controller('HomeCtrl', ['$scope', function($scope) {
   $scope.message = 'OK!';
 }]);
 
 
-app.controller('EmployeesCtrl', ['$scope', '$http', function($scope, $http) {
-  $http({
-    method: 'GET',
-    url: '/employees'
-  }).success(function(data, status, headers, config) {
+app.controller('EmployeesCtrl', ['$scope', 'EmployeeService', function($scope, service) {
+  service.list().success(function (data, status, headers, config) {
     $scope.employees = data.employees;
-  }).error(function(data, status, headers, config) {
-    // TODO: Handle error
   });
 }]);
 
-
-app.controller('EmployeeCtrl', ['$scope', '$routeParams', '$http', function($scope, $routeParams, $http) {
-  $http({
-    method: 'GET',
-    url: '/employees/' + $routeParams.employeeId
-  }).success(function(data, status, headers, config) {
-    $scope.employee = data.employee;
-  }).error(function(data, status, headers, config) {
-    // TODO: Handle error
+app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', function($scope, $routeParams, service) {
+  service.employee($routeParams.employeeId).success(function(data, status, headers, config) {
+    $scope.employee = data.employee
   });
 }]);
 
