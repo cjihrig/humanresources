@@ -17,10 +17,15 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'employee.html',
       controller: 'EmployeeCtrl'
     })
+    .when('/teams', {
+      templateUrl: 'teams.html',
+      controller: 'TeamsCtrl'
+    })
     .otherwise({
       redirectTo: '/employees'
     });
 }]);
+
 
 app.factory('EmployeeService', ['$http', function($http) {
   var exports = {};
@@ -51,20 +56,50 @@ app.factory('EmployeeService', ['$http', function($http) {
 
 }])
 
+
+app.factory('TeamService', ['$http', function($http) {
+  var exports = {};
+
+  function _handleError(data, status, headers, config) {
+    // TODO: do something here... Probably just redirect to an error page
+    console.log('%c ' + JSON.stringify(data), 'color:red');
+  }
+
+  function getTeams() {
+    return $http({
+      method: 'GET',
+      url: '/teams'
+    }).error(_handleError);
+  }
+
+  exports.list = getTeams;
+
+  return exports;
+}]);
+
+
 app.controller('HomeCtrl', ['$scope', function($scope) {
   $scope.message = 'OK!';
 }]);
 
 
 app.controller('EmployeesCtrl', ['$scope', 'EmployeeService', function($scope, service) {
-  service.list().success(function (data, status, headers, config) {
+  service.list().success(function(data, status, headers, config) {
     $scope.employees = data.employees;
   });
 }]);
 
+
 app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', function($scope, $routeParams, service) {
   service.employee($routeParams.employeeId).success(function(data, status, headers, config) {
     $scope.employee = data.employee
+  });
+}]);
+
+
+app.controller('TeamsCtrl', ['$scope', 'TeamService', function($scope, service) {
+  service.list().success(function(data, status, headers, config) {
+    $scope.teams = data.teams;
   });
 }]);
 

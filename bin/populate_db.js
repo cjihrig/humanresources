@@ -1,10 +1,12 @@
 var async = require('async');
 var mongoose = require('mongoose');
 var connection = require(process.cwd() + '/lib/connection');
-var employee = require(process.cwd() + '/models/employee')
+var employee = require(process.cwd() + '/models/employee');
+var team = require(process.cwd() + '/models/team');
 
 connection.open(function(error, conn) {
   var Employee = employee.getModel(conn);
+  var Team = team.getModel(conn);
   var data = {
     employees: [
       {
@@ -57,6 +59,24 @@ connection.open(function(error, conn) {
         },
         team: 'Project Development'
       }
+    ],
+    teams: [
+      {
+        name: 'Software and Services Group',
+        members: [
+          '1000003',
+          '1000025'
+        ]
+      },
+      {
+        name: 'Project Development',
+        members: [
+          '1000021',
+          '1000022',
+          '1000030',
+          '1000031'
+        ]
+      }
     ]
   };
 
@@ -83,6 +103,7 @@ connection.open(function(error, conn) {
           console.error('Error adding employee: ' + error);
         }
 
+        emp._id = employee._id;
         callback();
       });
     }, function(error) {
@@ -95,9 +116,54 @@ connection.open(function(error, conn) {
     });
   };
 
+  var deleteTeams = function(callback) {
+    console.log('Deleting teams');
+    Team.remove({}, function(error, response) {
+      if (error) {
+        console.error('Error deleting teams: ' + error);
+      }
+
+      console.log('Done deleting teams');
+      callback();
+    });
+  };
+
+  var addTeams = function(callback) {
+    console.log('Adding teams');
+    async.each(data.teams, function(t, callback) {
+      console.log('Adding team ' + t.name);
+      t.members = t.members.map(function(employeeId) {
+        var employee = data.employees.filter(function(employee) {
+          return employee.id === employeeId;
+        }).pop();
+
+        return employee._id;
+      });
+
+      var team = new Team(t);
+
+      team.save(function(error) {
+        if (error) {
+          console.error('Error adding team: ' + error);
+        }
+
+        callback();
+      });
+    }, function(error) {
+      if (error) {
+        console.error('Error: ' + error);
+      }
+
+      console.log('Done adding teams');
+      callback();
+    });
+  };
+
   async.series([
     deleteEmployees,
-    addEmployees
+    deleteTeams,
+    addEmployees,
+    addTeams
   ], function(error, results) {
     if (error) {
       console.error('Error: ' + error);

@@ -1,14 +1,14 @@
 var async = require('async');
 var express = require('express');
 var connection = require('../lib/connection');
-var employee = require('../models/employee')
+var employee = require('../models/employee');
 var router = express.Router();
 
 router.get('/employees', function(req, res, next) {
   var retrieve = function(conn, callback) {
     var Employee = employee.getModel(conn);
 
-    Employee.find({}, function(error, results) {
+    Employee.find().sort('name.last').exec(function(error, results) {
       callback(error, conn, results);
     });
   };
