@@ -43,3 +43,11 @@ span.icon-container {
   margin-right: 15px;
   border-radius: 4px;
 }
+
+div.button-bar {
+  text-align: right;
+}
+
+div.form-offset {
+  padding-top: 15px;
+}
