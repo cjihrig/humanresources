@@ -49,8 +49,17 @@ app.factory('EmployeeService', ['$http', function($http) {
     }).error(_handleError);
   }
 
+  function updateEmployee(id, employee) {
+    return $http({
+      method: 'PUT',
+      url: '/employees/' + id,
+      data: employee
+    }).error(_handleError);
+  }
+
   exports.list = getEmployees;
   exports.employee = getEmployee;
+  exports.update = updateEmployee;
 
   return exports;
 
@@ -160,11 +169,13 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'Te
 
   $scope.edit = function() {
     $scope.editing = !$scope.editing;
-  }
+  };
 
   $scope.save = function() {
-
-  }
+    Employee.update($routeParams.employeeId, $scope.employee).success(function(data, status) {
+      $scope.editing = !$scope.editing;
+    });
+  };
 
 }]);
 

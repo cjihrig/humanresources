@@ -6,7 +6,7 @@
   <div class="panel-body">
     <div class="button-bar">
       <button class="btn btn-warning" ng-click="edit()" ng-hide="editing">Edit</button>
-      <button class="btn btn-success" ng-show="editing">Save</button>
+      <button class="btn btn-success" ng-click="save()" ng-show="editing">Save</button>
     </div>
     <div class="col-xs-12 col-sm-4 text-center">
       <h3>{{employee.name.first}} {{employee.name.last}}</h3>
