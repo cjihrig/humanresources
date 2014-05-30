@@ -15,7 +15,6 @@ router.get('/employees', function(req, res, next) {
 });
 
 router.get('/employees/:employeeId', function(req, res, next) {
-  console.log(req.params.employeeId)
   Employee.findOne({
     id: req.params.employeeId
   }).populate('team').exec(function (error, results) {
