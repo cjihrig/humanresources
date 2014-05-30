@@ -17,6 +17,10 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'employee.html',
       controller: 'EmployeeCtrl'
     })
+    .when('/teams', {
+      templateUrl: 'teams.html',
+      controller: 'TeamsCtrl'
+    })
     .otherwise({
       redirectTo: '/employees'
     });
@@ -25,6 +29,27 @@ app.config(['$routeProvider', function($routeProvider) {
 
 app.factory('EmployeeService', ['$http', '$resource', function($http, $resource) {
   return $resource('/employees/:employeeId');
+}]);
+
+
+app.factory('TeamService', ['$http', function($http) {
+  var exports = {};
+
+  function _handleError(data, status, headers, config) {
+    // TODO: do something here... Probably just redirect to an error page
+    console.log('%c ' + JSON.stringify(data), 'color:red');
+  }
+
+  function getTeams() {
+    return $http({
+      method: 'GET',
+      url: '/teams'
+    }).error(_handleError);
+  }
+
+  exports.list = getTeams;
+
+  return exports;
 }]);
 
 
@@ -51,6 +76,13 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', fun
   }, function(response) {
     // TODO: do something here... Probably just redirect to an error page
     console.log('%c ' + response, 'color:red');
+  });
+}]);
+
+
+app.controller('TeamsCtrl', ['$scope', 'TeamService', function($scope, service) {
+  service.list().success(function(data, status, headers, config) {
+    $scope.teams = data.teams;
   });
 }]);
 
