@@ -15,7 +15,6 @@ connection.open(function(error, conn) {
           first: 'Colin',
           last: 'Ihrig'
         },
-        team: 'Software and Services Group',
         image: 'images/employees/1000003.png'
       },
       {
@@ -23,16 +22,14 @@ connection.open(function(error, conn) {
         name: {
           first: 'Adam',
           last: 'Bretz'
-        },
-        team: 'Project Development'
+        }
       },
       {
         id: '1000022',
         name: {
           first: 'Matt',
           last: 'Liegey'
-        },
-        team: 'Project Development'
+        }
       },
       {
         id: '1000025',
@@ -40,7 +37,6 @@ connection.open(function(error, conn) {
           first: 'Aleksey',
           last: 'Smolenchuk'
         },
-        team: 'Software and Services Group',
         image: 'images/employees/1000025.png' /* invalid image */
       },
       {
@@ -48,16 +44,14 @@ connection.open(function(error, conn) {
         name: {
           first: 'Sarah',
           last: 'Gay'
-        },
-        team: 'Project Development'
+        }
       },
       {
         id: '1000031',
         name: {
           first: 'Dave',
           last: 'Beshero'
-        },
-        team: 'Project Development'
+        }
       }
     ],
     teams: [
@@ -147,6 +141,7 @@ connection.open(function(error, conn) {
           console.error('Error adding team: ' + error);
         }
 
+        t._id = team._id;
         callback();
       });
     }, function(error) {
@@ -159,11 +154,39 @@ connection.open(function(error, conn) {
     });
   };
 
+  var updateEmployeeTeams = function(callback) {
+    console.log('Updating employee teams');
+    async.each(data.teams, function(t, callback) {
+
+      Employee.update({
+        _id: {
+          $in: t.members
+        }
+      }, {
+        team: t._id
+      }, function(error, numberAffected, response) {
+        if (error) {
+          console.error('Error updating employe team: ' + error);
+        }
+
+        callback();
+      });
+    }, function(error) {
+      if (error) {
+        console.error('Error: ' + error);
+      }
+
+      console.log('Done updating employee teams');
+      callback();
+    });
+  };
+
   async.series([
     deleteEmployees,
     deleteTeams,
     addEmployees,
-    addTeams
+    addTeams,
+    updateEmployeeTeams
   ], function(error, results) {
     if (error) {
       console.error('Error: ' + error);
