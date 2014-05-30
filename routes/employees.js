@@ -9,10 +9,8 @@ router.get('/employees', function(req, res, next) {
       // TODO: Handle error
     }
 
-    res.json({
-      employees: results
-    });
-
+    // Respond with valid data
+    res.json(results);
   });
 });
 
@@ -20,9 +18,8 @@ router.get('/employees/:employeeId', function(req, res, next) {
   console.log(req.params.employeeId)
   Employee.findOne({
     id: req.params.employeeId
-  }, function (error, results) {
+  }).populate('team').exec(function (error, results) {
 
-    console.log(error, results)
     // Handle error
     if (error) {
       // TODO: Handle error

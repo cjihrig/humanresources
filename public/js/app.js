@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('app', ['ngRoute']);
+var app = angular.module('app', ['ngRoute', 'ngResource']);
 
 
 app.config(['$routeProvider', function($routeProvider) {
@@ -27,34 +27,9 @@ app.config(['$routeProvider', function($routeProvider) {
 }]);
 
 
-app.factory('EmployeeService', ['$http', function($http) {
-  var exports = {};
-
-  function _handleError(data, status, headers, config) {
-    // TODO: do something here... Probably just redirect to an error page
-    console.log('%c ' + JSON.stringify(data), 'color:red');
-  }
-
-  function getEmployees() {
-    return $http({
-      method: 'GET',
-      url: '/employees'
-    }).error(_handleError);
-  }
-
-  function getEmployee(id) {
-    return $http({
-      method: 'GET',
-      url: '/employees/' + id
-    }).error(_handleError);
-  }
-
-  exports.list = getEmployees;
-  exports.employee = getEmployee;
-
-  return exports;
-
-}])
+app.factory('EmployeeService', ['$http', '$resource', function($http, $resource) {
+  return $resource('/employees/:employeeId');
+}]);
 
 
 app.factory('TeamService', ['$http', function($http) {
@@ -84,15 +59,23 @@ app.controller('HomeCtrl', ['$scope', function($scope) {
 
 
 app.controller('EmployeesCtrl', ['$scope', 'EmployeeService', function($scope, service) {
-  service.list().success(function(data, status, headers, config) {
-    $scope.employees = data.employees;
+  service.query(function(data, headers) {
+    $scope.employees = data;
+  }, function(response) {
+    // TODO: do something here... Probably just redirect to an error page
+    console.log('%c ' + response, 'color:red');
   });
 }]);
 
 
 app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', function($scope, $routeParams, service) {
-  service.employee($routeParams.employeeId).success(function(data, status, headers, config) {
-    $scope.employee = data.employee
+  service.get({
+    employeeId: $routeParams.employeeId
+  }, function(data, headers) {
+    $scope.employee = data.employee;
+  }, function(response) {
+    // TODO: do something here... Probably just redirect to an error page
+    console.log('%c ' + response, 'color:red');
   });
 }]);
 

@@ -6,7 +6,10 @@ var EmployeeSchema = new Schema({
     first: String,
     last: String
   },
-  team: String,
+  team: {
+    type: Schema.Types.ObjectId,
+    ref: 'Team'
+  },
   image: {
     type: String,
     default: 'images/user.png'
