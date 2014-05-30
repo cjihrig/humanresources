@@ -2,6 +2,7 @@ var async = require('async');
 var express = require('express');
 var connection = require('../lib/connection');
 var employee = require('../models/employee');
+var team = require('../models/team');
 var router = express.Router();
 
 router.get('/employees', function(req, res, next) {
@@ -35,11 +36,12 @@ router.get('/employees', function(req, res, next) {
 router.get('/employees/:employeeId', function(req, res, next) {
   var retrieve = function(conn, callback) {
     var Employee = employee.getModel(conn);
+    var Team = team.getModel(conn);
     var employeeId = req.params.employeeId;
 
     Employee.findOne({
       id: employeeId
-    }, function(error, results) {
+    }).populate('team').exec(function(error, results) {
       callback(error, conn, results);
     });
   };
