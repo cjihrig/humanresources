@@ -7,10 +7,5 @@ var TeamSchema = new Schema({
     ref: 'Employee'
   }]
 });
-var getModel = function(connection) {
-  return connection.model('Team', TeamSchema);
-};
 
-module.exports = {
-  getModel: getModel
-};
+var Team = module.exports = mongoose.model('Team', TeamSchema);

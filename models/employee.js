@@ -12,10 +12,5 @@ var EmployeeSchema = new Schema({
     default: 'images/user.png'
   }
 });
-var getModel = function(connection) {
-  return connection.model('Employee', EmployeeSchema);
-};
 
-module.exports = {
-  getModel: getModel
-};
+var Employee = module.exports = mongoose.model('Employee', EmployeeSchema);
