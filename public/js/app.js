@@ -21,8 +21,12 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'teams.html',
       controller: 'TeamsCtrl'
     })
+    .when('/teams/:teamId', {
+      templateUrl: 'team.html',
+      controller: 'TeamCtrl'
+    })
     .otherwise({
-      redirectTo: '/employees'
+      redirectTo: '/'
     });
 }]);
 
@@ -32,24 +36,8 @@ app.factory('EmployeeService', ['$http', '$resource', function($http, $resource)
 }]);
 
 
-app.factory('TeamService', ['$http', function($http) {
-  var exports = {};
-
-  function _handleError(data, status, headers, config) {
-    // TODO: do something here... Probably just redirect to an error page
-    console.log('%c ' + JSON.stringify(data), 'color:red');
-  }
-
-  function getTeams() {
-    return $http({
-      method: 'GET',
-      url: '/teams'
-    }).error(_handleError);
-  }
-
-  exports.list = getTeams;
-
-  return exports;
+app.factory('TeamService', ['$http', '$resource', function($http, $resource) {
+  return $resource('/teams/:teamId');
 }]);
 
 
@@ -81,8 +69,23 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', fun
 
 
 app.controller('TeamsCtrl', ['$scope', 'TeamService', function($scope, service) {
-  service.list().success(function(data, status, headers, config) {
-    $scope.teams = data.teams;
+  service.query(function(data, headers) {
+    $scope.teams = data;
+  }, function(response) {
+    // TODO: do something here... Probably just redirect to an error page
+    console.log('%c ' + response, 'color:red');
+  });
+}]);
+
+
+app.controller('TeamCtrl', ['$scope', '$routeParams', 'TeamService', function($scope, $routeParams, service) {
+  service.get({
+    teamId: $routeParams.teamId
+  }, function(data, headers) {
+    $scope.team = data.team;
+  }, function(response) {
+    // TODO: do something here... Probably just redirect to an error page
+    console.log('%c ' + response, 'color:red');
   });
 }]);
 
