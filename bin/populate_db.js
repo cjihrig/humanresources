@@ -151,19 +151,20 @@ var addTeams = function(callback) {
   });
 };
 
-var updateEmployeeTeams = function(callback) {
+var updateEmployeeTeams = function (callback) {
   console.log('Updating employee teams');
   async.each(data.teams, function(t, callback) {
-
     Employee.update({
       _id: {
         $in: t.members
       }
     }, {
       team: t._id
+    }, {
+      multi: true
     }, function(error, numberAffected, response) {
       if (error) {
-        console.error('Error updating employee team: ' + error);
+        console.error('Error updating employe team: ' + error);
       }
 
       callback();

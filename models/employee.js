@@ -1,10 +1,20 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var EmployeeSchema = new Schema({
-  id: String,
+  id: {
+    type: String,
+    required: true,
+    unique: true
+  },
   name: {
-    first: String,
-    last: String
+    first: {
+      type: String,
+      required: true
+    },
+    last: {
+      type: String,
+      required: true
+    }
   },
   team: {
     type: Schema.Types.ObjectId,
