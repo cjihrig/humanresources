@@ -1,11 +1,9 @@
 var async = require('async');
 var mongoose = require('mongoose');
 require(process.cwd() + '/lib/connection');
-var employee = mongoose.model('Employee');
-var team = mongoose.model('Team');
+var Employee = mongoose.model('Employee');
+var Team = mongoose.model('Team');
 
-var Employee = employee;
-var Team = team;
 var data = {
   employees: [
     {
@@ -165,7 +163,7 @@ var updateEmployeeTeams = function(callback) {
       team: t._id
     }, function(error, numberAffected, response) {
       if (error) {
-        console.error('Error updating employe team: ' + error);
+        console.error('Error updating employee team: ' + error);
       }
 
       callback();

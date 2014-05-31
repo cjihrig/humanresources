@@ -8,4 +8,4 @@ var TeamSchema = new Schema({
   }]
 });
 
-var Team = module.exports = mongoose.model('Team', TeamSchema);
+module.exports = mongoose.model('Team', TeamSchema);
