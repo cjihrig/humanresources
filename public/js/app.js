@@ -31,12 +31,12 @@ app.config(['$routeProvider', function($routeProvider) {
 }]);
 
 
-app.factory('EmployeeService', ['$http', '$resource', function($http, $resource) {
+app.factory('EmployeeService', ['$resource', function($resource) {
   return $resource('/employees/:employeeId');
 }]);
 
 
-app.factory('TeamService', ['$http', '$resource', function($http, $resource) {
+app.factory('TeamService', ['$resource', function($resource) {
   return $resource('/teams/:teamId');
 }]);
 
