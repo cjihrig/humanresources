@@ -164,6 +164,8 @@ connection.open(function(error, conn) {
         }
       }, {
         team: t._id
+      }, {
+        multi: true
       }, function(error, numberAffected, response) {
         if (error) {
           console.error('Error updating employe team: ' + error);
