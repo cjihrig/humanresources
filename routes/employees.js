@@ -6,7 +6,7 @@ var router = express.Router();
 router.get('/employees', function(req, res, next) {
   Employee.find().sort('name.last').exec(function(error, results) {
     if (error) {
-      // TODO: Handle error
+      return next(error);
     }
 
     // Respond with valid data
@@ -18,10 +18,8 @@ router.get('/employees/:employeeId', function(req, res, next) {
   Employee.findOne({
     id: req.params.employeeId
   }).populate('team').exec(function (error, results) {
-
-    // Handle error
     if (error) {
-      // TODO: Handle error
+      return next(error);
     }
 
     // If valid user was not found, send 404
@@ -30,11 +28,8 @@ router.get('/employees/:employeeId', function(req, res, next) {
     }
 
     // Respond with valid data
-    res.json({
-      employee: results
-    });
+    res.json(results);
   });
-
 });
 
 module.exports = router;

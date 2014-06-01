@@ -5,9 +5,8 @@ var router = express.Router();
 
 router.get('/teams', function(req, res, next) {
   Team.find().sort('name').populate('members').exec(function(error, results) {
-    // Handle error
     if (error) {
-      // TODO: Handle error
+      return next(error);
     }
 
     // Respond with valid data
@@ -16,30 +15,11 @@ router.get('/teams', function(req, res, next) {
 });
 
 router.get('/teams/:teamId', function(req, res, next) {
-  var retrieve = function(conn, callback) {
-    var Employee = employee.getModel(conn);
-    var Team = team.getModel(conn);
-    var teamId = req.params.teamId;
-
-    Team.findOne({
-      _id: teamId
-    }).populate('members').exec(function(error, results) {
-      callback(error, conn, results);
-    });
-  };
-
-  async.waterfall([
-    connection.open,
-    retrieve
-  ], function(error, conn, results) {
-    // Close connection first
-    if (conn) {
-      conn.close();
-    }
-
-    // Handle error
+  Team.findOne({
+    _id: req.params.teamId
+  }).populate('members').exec(function(error, results) {
     if (error) {
-      // TODO: Handle error
+      return next(error);
     }
 
     // If valid team was not found, send 404
@@ -48,10 +28,7 @@ router.get('/teams/:teamId', function(req, res, next) {
     }
 
     // Respond with valid data
-    res.json({
-      team: results
-    });
-
+    res.json(results);
   });
 });
 

@@ -1,5 +1,4 @@
 'use strict';
-
 var app = angular.module('app', ['ngRoute', 'ngResource']);
 
 
@@ -49,10 +48,7 @@ app.controller('HomeCtrl', ['$scope', function($scope) {
 app.controller('EmployeesCtrl', ['$scope', 'EmployeeService', function($scope, service) {
   service.query(function(data, headers) {
     $scope.employees = data;
-  }, function(response) {
-    // TODO: do something here... Probably just redirect to an error page
-    console.log('%c ' + response, 'color:red');
-  });
+  }, _handleError);
 }]);
 
 
@@ -60,21 +56,15 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', fun
   service.get({
     employeeId: $routeParams.employeeId
   }, function(data, headers) {
-    $scope.employee = data.employee;
-  }, function(response) {
-    // TODO: do something here... Probably just redirect to an error page
-    console.log('%c ' + response, 'color:red');
-  });
+    $scope.employee = data;
+  }, _handleError);
 }]);
 
 
 app.controller('TeamsCtrl', ['$scope', 'TeamService', function($scope, service) {
   service.query(function(data, headers) {
     $scope.teams = data;
-  }, function(response) {
-    // TODO: do something here... Probably just redirect to an error page
-    console.log('%c ' + response, 'color:red');
-  });
+  }, _handleError);
 }]);
 
 
@@ -82,11 +72,8 @@ app.controller('TeamCtrl', ['$scope', '$routeParams', 'TeamService', function($s
   service.get({
     teamId: $routeParams.teamId
   }, function(data, headers) {
-    $scope.team = data.team;
-  }, function(response) {
-    // TODO: do something here... Probably just redirect to an error page
-    console.log('%c ' + response, 'color:red');
-  });
+    $scope.team = data;
+  }, _handleError);
 }]);
 
 
@@ -99,3 +86,9 @@ app.directive('imageFallback', function() {
     }
   };
 });
+
+
+function _handleError(response) {
+  // TODO: do something here... Probably just redirect to an error page
+  console.log('%c ' + response, 'color:red');
+}
