@@ -1,59 +1,23 @@
-var async = require('async');
 var express = require('express');
-var connection = require('../lib/connection');
-var employee = require('../models/employee');
+var mongoose = require('mongoose');
+var Employee = mongoose.model('Employee');
 var router = express.Router();
 
 router.get('/employees', function(req, res, next) {
-  var retrieve = function(conn, callback) {
-    var Employee = employee.getModel(conn);
-
-    Employee.find().sort('name.last').exec(function(error, results) {
-      callback(error, conn, results);
-    });
-  };
-
-  async.waterfall([
-    connection.open,
-    retrieve
-  ], function(error, conn, results) {
-    // Close connection first
-    if (conn) {
-      conn.close();
-    }
-
-    // Handle error
+  Employee.find().sort('name.last').exec(function(error, results) {
     if (error) {
       // TODO: Handle error
     }
 
     // Respond with valid data
-    res.json({
-      employees: results
-    });
+    res.json(results);
   });
 });
 
 router.get('/employees/:employeeId', function(req, res, next) {
-  var retrieve = function(conn, callback) {
-    var Employee = employee.getModel(conn);
-    var employeeId = req.params.employeeId;
-
-    Employee.findOne({
-      id: employeeId
-    }, function(error, results) {
-      callback(error, conn, results);
-    });
-  };
-
-  async.waterfall([
-    connection.open,
-    retrieve
-  ], function(error, conn, results) {
-    // Close connection first
-    if (conn) {
-      conn.close();
-    }
+  Employee.findOne({
+    id: req.params.employeeId
+  }).populate('team').exec(function (error, results) {
 
     // Handle error
     if (error) {
@@ -70,6 +34,7 @@ router.get('/employees/:employeeId', function(req, res, next) {
       employee: results
     });
   });
+
 });
 
 router.put('/employees/:employeeId', function (req, res, next) {

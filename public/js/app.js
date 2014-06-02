@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('app', ['ngRoute']);
+var app = angular.module('app', ['ngRoute', 'ngResource']);
 
 
 app.config(['$routeProvider', function($routeProvider) {
@@ -27,61 +27,14 @@ app.config(['$routeProvider', function($routeProvider) {
 }]);
 
 
-app.factory('EmployeeService', ['$http', function($http) {
-  var exports = {};
+app.factory('EmployeeService', ['$resource', function($resource) {
+  return $resource('/employees/:employeeId');
+}]);
 
-  function _handleError(data, status, headers, config) {
-    // TODO: do something here... Probably just redirect to an error page
-    console.log('%c ' + JSON.stringify(data), 'color:red');
-  }
 
-  function getEmployees() {
-    return $http({
-      method: 'GET',
-      url: '/employees'
-    }).error(_handleError);
-  }
-
-  function getEmployee(id) {
-    return $http({
-      method: 'GET',
-      url: '/employees/' + id
-    }).error(_handleError);
-  }
-
-  function updateEmployee(id, employee) {
-    return $http({
-      method: 'PUT',
-      url: '/employees/' + id,
-      data: employee
-    }).error(_handleError);
-  }
-
-  exports.list = getEmployees;
-  exports.employee = getEmployee;
-  exports.update = updateEmployee;
-
-  return exports;
-
-}]).factory('TeamService', ['$http', function($http) {
-  var exports = {};
-
-  function _handleError(data, status, headers, config) {
-    // TODO: do something here... Probably just redirect to an error page
-    console.log('%c ' + JSON.stringify(data), 'color:red');
-  }
-
-  function getTeams() {
-    return $http({
-      method: 'GET',
-      url: '/teams'
-    }).error(_handleError);
-  }
-
-  exports.list = getTeams;
-
-  return exports;
-}]);;
+app.factory('TeamService', ['$resource', function($resource) {
+  return $resource('/teams/:teamId');
+}]);
 
 app.directive('imageFallback', function() {
   return {
@@ -98,7 +51,7 @@ app.directive('imageFallback', function() {
 
     if (attrs.editType === 'select') {
       template += '<div ng-hide="editing">{{displayValue}}</div>';
-      template += '<select ng-show="editing" ng-model="value" class="form-control" ng-options="o._id as o.name for o in _options"></select>';
+      template += '<select ng-show="editing" ng-model="value" class="form-control" ng-options="o.name for o in _options"></select>';
     }
     else {
       template += '<div ng-hide="editing">{{value}}</div>';
@@ -144,29 +97,29 @@ app.controller('HomeCtrl', ['$scope', function($scope) {
 
 
 app.controller('EmployeesCtrl', ['$scope', 'EmployeeService', function($scope, service) {
-  service.list().success(function(data, status, headers, config) {
-    $scope.employees = data.employees;
+  service.query(function(data, headers) {
+    $scope.employees = data;
+  }, function(response) {
+    // TODO: do something here... Probably just redirect to an error page
+    console.log('%c ' + response, 'color:red');
   });
 }]);
 
 
-app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'TeamService', '$timeout', function($scope, $routeParams, Employee, Team, $timeout) {
-  Employee.employee($routeParams.employeeId).success(function(data, status, headers, config) {
-    $scope.employee = data.employee;
+app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'TeamService', function($scope, $routeParams, service, team) {
+  service.get({
+    employeeId: $routeParams.employeeId
+  }).$promise.then(function (data) {
+  $scope.employee = data.employee;
+
+  team.query().$promise.then(function (data) {
+    $scope.teams = data;
+    $scope.employee.team = data[0];
   });
 
-  $scope.editing = false;
-  $scope.teams = [];
-  $timeout(function() {
-    $scope.teams = [{
-      name: 'Project Development',
-      _id: '53849da49436c60000446d79'
-    }, {
-      name: 'Software and Services Group',
-      _id: '53849da49436c60000446d75'
-    }];
-  }, 100);
+ });
 
+  $scope.editing = false;
   $scope.edit = function() {
     $scope.editing = !$scope.editing;
   };
@@ -181,7 +134,5 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'Te
 
 
 app.controller('TeamsCtrl', ['$scope', 'TeamService', function($scope, service) {
-  service.list().success(function(data, status, headers, config) {
-    $scope.teams = data.teams;
-  });
+  $scope.teams = service.query();
 }]);
