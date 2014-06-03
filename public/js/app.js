@@ -1,5 +1,4 @@
 'use strict';
-
 var app = angular.module('app', ['ngRoute', 'ngResource']);
 
 
@@ -21,35 +20,23 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'teams.html',
       controller: 'TeamsCtrl'
     })
+    .when('/teams/:teamId', {
+      templateUrl: 'team.html',
+      controller: 'TeamCtrl'
+    })
     .otherwise({
-      redirectTo: '/employees'
+      redirectTo: '/'
     });
 }]);
 
 
-app.factory('EmployeeService', ['$http', '$resource', function($http, $resource) {
+app.factory('EmployeeService', ['$resource', function($resource) {
   return $resource('/employees/:employeeId');
 }]);
 
 
-app.factory('TeamService', ['$http', function($http) {
-  var exports = {};
-
-  function _handleError(data, status, headers, config) {
-    // TODO: do something here... Probably just redirect to an error page
-    console.log('%c ' + JSON.stringify(data), 'color:red');
-  }
-
-  function getTeams() {
-    return $http({
-      method: 'GET',
-      url: '/teams'
-    }).error(_handleError);
-  }
-
-  exports.list = getTeams;
-
-  return exports;
+app.factory('TeamService', ['$resource', function($resource) {
+  return $resource('/teams/:teamId');
 }]);
 
 
@@ -61,10 +48,7 @@ app.controller('HomeCtrl', ['$scope', function($scope) {
 app.controller('EmployeesCtrl', ['$scope', 'EmployeeService', function($scope, service) {
   service.query(function(data, headers) {
     $scope.employees = data;
-  }, function(response) {
-    // TODO: do something here... Probably just redirect to an error page
-    console.log('%c ' + response, 'color:red');
-  });
+  }, _handleError);
 }]);
 
 
@@ -72,18 +56,24 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', fun
   service.get({
     employeeId: $routeParams.employeeId
   }, function(data, headers) {
-    $scope.employee = data.employee;
-  }, function(response) {
-    // TODO: do something here... Probably just redirect to an error page
-    console.log('%c ' + response, 'color:red');
-  });
+    $scope.employee = data;
+  }, _handleError);
 }]);
 
 
 app.controller('TeamsCtrl', ['$scope', 'TeamService', function($scope, service) {
-  service.list().success(function(data, status, headers, config) {
-    $scope.teams = data.teams;
-  });
+  service.query(function(data, headers) {
+    $scope.teams = data;
+  }, _handleError);
+}]);
+
+
+app.controller('TeamCtrl', ['$scope', '$routeParams', 'TeamService', function($scope, $routeParams, service) {
+  service.get({
+    teamId: $routeParams.teamId
+  }, function(data, headers) {
+    $scope.team = data;
+  }, _handleError);
 }]);
 
 
@@ -96,3 +86,9 @@ app.directive('imageFallback', function() {
     }
   };
 });
+
+
+function _handleError(response) {
+  // TODO: do something here... Probably just redirect to an error page
+  console.log('%c ' + response, 'color:red');
+}
