@@ -33,44 +33,17 @@ router.get('/employees/:employeeId', function(req, res, next) {
 });
 
 router.put('/employees/:employeeId', function (req, res, next) {
-  // function update (conn, callback) {
-  //   var Employee = employee.getModel(conn);
+  delete req.body['_id'];
+  req.body.team = req.body.team._id;
 
-  //   // we can't update this because it's our primary key
-  //   delete req.body['_id'];
-
-  //   Employee.update({
-  //     id:req.params.employeeId
-  //   }, req.body, callback);
-  // }
-
-  // async.waterfall([
-  //   connection.open,
-  //   update
-  //   ], function (error, conn, results) {
-  //     console.log(error, conn, results)
-  //     if (conn) {
-  //       conn.close();
-  //     }
-
-  //     // Handle error
-  //     if (error) {
-  //       // TODO: Handle error
-  //     }
-
-  //     // If valid user was not found, send 404
-  //     if (!results) {
-  //       res.send(404);
-  //     }
-
-  //     // Respond with valid data
-  //     res.json({
-  //       employee: results
-  //     });
-
-  //   })
-  return res.send(200);
-
+  Employee.update({
+    id:req.params.employeeId
+  }, req.body, function (error, data) {
+    if (error) {
+      return next(error);
+    }
+    res.send(200);
+  });
 });
 
 module.exports = router;

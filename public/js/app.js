@@ -55,6 +55,7 @@ app.directive('imageFallback', function() {
 
   function link (scope, element, attrs) {
     var template = '<div>';
+    var newElement;
 
     if (attrs.editType === 'select') {
       template += '<div ng-hide="editing">{{displayValue}}</div>';
@@ -67,10 +68,8 @@ app.directive('imageFallback', function() {
 
     // close the outer div
     template += '</div>';
-
-    element.html(template);
-
-    $compile(element.contents())(scope);
+    newElement = $compile(template)(scope);
+    element.replaceWith(newElement);
   }
 
   var exports = {};
@@ -82,13 +81,7 @@ app.directive('imageFallback', function() {
     displayValue: '=displayValue'
   };
   exports.restrict = 'E';
-  exports.replace = true;
   exports.link = link;
-
-  // exports.controller = function ($scope) {
-
-  // }
-
 
   return exports;
 
