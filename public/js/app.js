@@ -28,7 +28,11 @@ app.config(['$routeProvider', function($routeProvider) {
 
 
 app.factory('EmployeeService', ['$resource', function($resource) {
-  return $resource('/employees/:employeeId');
+  return $resource('/employees/:employeeId', {}, {
+    update: {
+      method: 'PUT'
+    }
+  });
 }]);
 
 
@@ -106,18 +110,28 @@ app.controller('EmployeesCtrl', ['$scope', 'EmployeeService', function($scope, s
 }]);
 
 
-app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'TeamService', function($scope, $routeParams, service, team) {
-  service.get({
-    employeeId: $routeParams.employeeId
-  }).$promise.then(function (data) {
-  $scope.employee = data.employee;
+app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'TeamService', '$q',
+  function($scope, $routeParams, employee, team, $q) {
 
-  team.query().$promise.then(function (data) {
-    $scope.teams = data;
-    $scope.employee.team = data[0];
+    function getTeam (teams, teamId) {
+      for (var i = teams.length - 1; i >= 0; i--) {
+        var t = teams[i];
+        if (t._id === teamId) {
+          return t;
+        }
+      }
+    }
+
+  $q.all([
+    employee.get({
+      employeeId: $routeParams.employeeId
+    }).$promise,
+    team.query().$promise
+  ]).then(function(values) {
+    $scope.teams = values[1];
+    $scope.employee = values[0].employee;
+    $scope.employee.team = getTeam($scope.teams, $scope.employee.team._id);
   });
-
- });
 
   $scope.editing = false;
   $scope.edit = function() {
@@ -125,7 +139,9 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'Te
   };
 
   $scope.save = function() {
-    Employee.update($routeParams.employeeId, $scope.employee).success(function(data, status) {
+    employee.update({
+      employeeId: $routeParams.employeeId
+    }, $scope.employee, function() {
       $scope.editing = !$scope.editing;
     });
   };
