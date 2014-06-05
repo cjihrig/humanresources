@@ -1,5 +1,4 @@
 'use strict';
-
 var app = angular.module('app', ['ngRoute', 'ngResource']);
 
 
@@ -21,8 +20,12 @@ app.config(['$routeProvider', function($routeProvider) {
       templateUrl: 'teams.html',
       controller: 'TeamsCtrl'
     })
+    .when('/teams/:teamId', {
+      templateUrl: 'team.html',
+      controller: 'TeamCtrl'
+    })
     .otherwise({
-      redirectTo: '/employees'
+      redirectTo: '/'
     });
 }]);
 
@@ -91,10 +94,6 @@ app.directive('imageFallback', function() {
 
 });
 
-
-
-
-
 app.controller('HomeCtrl', ['$scope', function($scope) {
   $scope.message = 'OK!';
 }]);
@@ -103,10 +102,7 @@ app.controller('HomeCtrl', ['$scope', function($scope) {
 app.controller('EmployeesCtrl', ['$scope', 'EmployeeService', function($scope, service) {
   service.query(function(data, headers) {
     $scope.employees = data;
-  }, function(response) {
-    // TODO: do something here... Probably just redirect to an error page
-    console.log('%c ' + response, 'color:red');
-  });
+  }, _handleError);
 }]);
 
 
@@ -129,7 +125,7 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'Te
     team.query().$promise
   ]).then(function(values) {
     $scope.teams = values[1];
-    $scope.employee = values[0].employee;
+    $scope.employee = values[0];
     $scope.employee.team = getTeam($scope.teams, $scope.employee.team._id);
   });
 
@@ -152,3 +148,16 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'Te
 app.controller('TeamsCtrl', ['$scope', 'TeamService', function($scope, service) {
   $scope.teams = service.query();
 }]);
+
+app.controller('TeamCtrl', ['$scope', '$routeParams', 'TeamService', function($scope, $routeParams, service) {
+  service.get({
+    teamId: $routeParams.teamId
+  }, function(data, headers) {
+    $scope.team = data;
+  }, _handleError);
+}]);
+
+function _handleError(response) {
+  // TODO: do something here... Probably just redirect to an error page
+  console.log('%c ' + response, 'color:red');
+}
