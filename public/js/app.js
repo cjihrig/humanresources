@@ -120,7 +120,7 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'Te
     $scope.teams = values[1];
     $scope.employee = values[0];
     $scope.employee.team = getTeam($scope.teams, $scope.employee.team._id);
-  });
+  }).catch(_handleError);
 
   $scope.editing = false;
   $scope.edit = function() {
@@ -139,7 +139,9 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'Te
 
 
 app.controller('TeamsCtrl', ['$scope', 'TeamService', function($scope, service) {
-  $scope.teams = service.query();
+  service.query(function (data) {
+    $scope.teams = data;
+  }, _handleError);
 }]);
 
 app.controller('TeamCtrl', ['$scope', '$routeParams', 'TeamService', function($scope, $routeParams, service) {
