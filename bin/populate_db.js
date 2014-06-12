@@ -53,42 +53,32 @@ var data = {
   ],
   teams: [
     {
-      name: 'Software and Services Group',
-      members: [
-        '1000003',
-        '1000025'
-      ]
+      name: 'Software and Services Group'
     },
     {
-      name: 'Project Development',
-      members: [
-        '1000021',
-        '1000022',
-        '1000030',
-        '1000031'
-      ]
+      name: 'Project Development'
     }
   ]
 };
 
 var deleteEmployees = function(callback) {
-  console.log('Deleting employees');
+  console.info('Deleting employees');
   Employee.remove({}, function(error, response) {
     if (error) {
       console.error('Error deleting employees: ' + error);
     }
 
-    console.log('Done deleting employees');
+    console.info('Done deleting employees');
     callback();
   });
 };
 
 var addEmployees = function(callback) {
-  console.log('Adding employees');
+  console.info('Adding employees');
   async.each(data.employees, function(emp, callback) {
     var employee = new Employee(emp);
 
-    console.log('Adding employee ' + emp.id);
+    console.info('Adding employee ' + emp.id);
     employee.save(function(error) {
       if (error) {
         console.error('Error adding employee: ' + error);
@@ -102,34 +92,27 @@ var addEmployees = function(callback) {
       console.error('Error: ' + error);
     }
 
-    console.log('Done adding employees');
+    console.info('Done adding employees');
     callback();
   });
 };
 
 var deleteTeams = function(callback) {
-  console.log('Deleting teams');
+  console.info('Deleting teams');
   Team.remove({}, function(error, response) {
     if (error) {
       console.error('Error deleting teams: ' + error);
     }
 
-    console.log('Done deleting teams');
+    console.info('Done deleting teams');
     callback();
   });
 };
 
 var addTeams = function(callback) {
-  console.log('Adding teams');
+  console.info('Adding teams');
   async.each(data.teams, function(t, callback) {
-    console.log('Adding team ' + t.name);
-    t.members = t.members.map(function(employeeId) {
-      var employee = data.employees.filter(function(employee) {
-        return employee.id === employeeId;
-      }).pop();
-
-      return employee._id;
-    });
+    console.info('Adding team ' + t.name);
 
     var team = new Team(t);
 
@@ -146,38 +129,30 @@ var addTeams = function(callback) {
       console.error('Error: ' + error);
     }
 
-    console.log('Done adding teams');
+    console.info('Done adding teams');
     callback();
   });
 };
 
 var updateEmployeeTeams = function (callback) {
-  console.log('Updating employee teams');
-  async.each(data.teams, function(t, callback) {
-    Employee.update({
-      _id: {
-        $in: t.members
-      }
-    }, {
-      team: t._id
-    }, {
-      multi: true
-    }, function(error, numberAffected, response) {
-      if (error) {
-        console.error('Error updating employe team: ' + error);
-      }
+  console.info('Updating employee teams');
+  var team = data.teams[0];
 
-      callback();
-    });
-  }, function(error) {
+  // Set everyone to be on the same team to start  
+  Employee.update({}, {
+    team: team._id
+  }, {
+    multi: true
+  }, function (error, numberAffected, response) {
     if (error) {
-      console.error('Error: ' + error);
+      console.error('Error updating employe team: ' + error);
     }
 
-    console.log('Done updating employee teams');
+    console.info('Done updating employee teams');
     callback();
   });
 };
+
 
 async.series([
   deleteEmployees,

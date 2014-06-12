@@ -103,7 +103,7 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'Te
   function($scope, $routeParams, employee, team, $q) {
 
     function getTeam (teams, teamId) {
-      for (var i = teams.length - 1; i >= 0; i--) {
+      for (var i = 0, l = teams.length; i < l; ++i) {
         var t = teams[i];
         if (t._id === teamId) {
           return t;
