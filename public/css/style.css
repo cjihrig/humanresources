@@ -45,9 +45,13 @@ span.icon-container {
 }
 
 div.button-bar {
-  text-align: right;
+  text-align: left;
 }
 
 div.form-offset {
   padding-top: 15px;
+}
+
+.margin-top-reset {
+  margin-top: 0;
 }
