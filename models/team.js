@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var postFind = require('mongoose-post-find');
-var Async = require('async');
+var async = require('async');
 var Schema = mongoose.Schema;
 var TeamSchema = new Schema({
   name: {
@@ -8,45 +8,45 @@ var TeamSchema = new Schema({
     required: true
   },
   members: {
-  	type: [Schema.Types.Mixed]
+    type: [Schema.Types.Mixed]
   }
 });
 
 function _attachMembers (Employee, result, callback) {
-	Employee.find({
-		team: result._id
-	}, function (error, employees) {
-		if (error) {
-			return callback(error);
-		}
-		
-		result.members = employees;
+    Employee.find({
+        team: result._id
+    }, function (error, employees) {
+        if (error) {
+            return callback(error);
+        }
+        
+        result.members = employees;
 
-		callback(null, result);
+        callback(null, result);
 
-	});
+    });
 }
 
 // wire up events to listen for find and findOne
 TeamSchema.plugin(postFind, {
-	find: function (result, callback) {
-		var Employee = mongoose.model('Employee');
+    find: function (result, callback) {
+        var Employee = mongoose.model('Employee');
 
-		Async.each(result, function (item, callback) {
-			_attachMembers(Employee, item, callback);
-		}, function (error) {
-			if (error) {
-				return callback(error);
-			}
+        async.each(result, function (item, callback) {
+            _attachMembers(Employee, item, callback);
+        }, function (error) {
+            if (error) {
+                return callback(error);
+            }
 
-			callback(null, result)
-		});
-	},
-	findOne: function (result, callback) {
-		var Employee = mongoose.model('Employee');
+            callback(null, result)
+        });
+    },
+    findOne: function (result, callback) {
+        var Employee = mongoose.model('Employee');
 
-		_attachMembers(Employee, result, callback);
-	}
+        _attachMembers(Employee, result, callback);
+    }
 });
 
 module.exports = mongoose.model('Team', TeamSchema);

@@ -39,17 +39,12 @@ router.put('/employees/:employeeId', function (req, res, next) {
   delete req.body._id;
   req.body.team = req.body.team._id;
 
-  console.dir(req.body)
-
-  // Async.series([function (callback) {
     Employee.update({
       id: req.params.employeeId
     }, req.body, function (err, numberAffected, response) {
       if (err) {
         return next(err);
       }
-
-      console.log(numberAffected)
 
       res.send(200);
 
