@@ -12,13 +12,25 @@ var data = {
         first: 'Colin',
         last: 'Ihrig'
       },
-      image: 'images/employees/1000003.png'
+      image: 'images/employees/1000003.png',
+      address: {
+        lines: ['11 Wall Street'],
+        city: 'New York',
+        state: 'NY',
+        zip: 10118
+      }
     },
     {
       id: '1000021',
       name: {
         first: 'Adam',
         last: 'Bretz'
+      },
+      address: {
+        lines: ['46 18th St','St. 210'],
+        city: 'Pittsburgh',
+        state: 'PA',
+        zip: 15222
       }
     },
     {
@@ -26,6 +38,12 @@ var data = {
       name: {
         first: 'Matt',
         last: 'Liegey'
+      },
+      address: {
+        lines: ['2 S Market Square','(Market Square)'],
+        city: 'Pittsburgh',
+        state: 'PA',
+        zip: 15222
       }
     },
     {
@@ -34,13 +52,25 @@ var data = {
         first: 'Aleksey',
         last: 'Smolenchuk'
       },
-      image: 'images/employees/1000025.png' /* invalid image */
+      image: 'images/employees/1000025.png' /* invalid image */,
+      address: {
+        lines: ['3803 Forbes Ave'],
+        city: 'Pittsburgh',
+        state: 'PA',
+        zip: 15213  
+      }
     },
     {
       id: '1000030',
       name: {
         first: 'Sarah',
         last: 'Gay'
+      },
+      address: {
+        lines: ['8651 University Blvd'],
+        city: 'Pittsburgh',
+        state: 'PA',
+        zip: 15108  
       }
     },
     {
@@ -48,6 +78,12 @@ var data = {
       name: {
         first: 'Dave',
         last: 'Beshero'
+      },
+      address: {
+        lines: ['1539 Washington Rd'],
+        city: 'Mt Lebanon',
+        state: 'PA',
+        zip: 15228  
       }
     }
   ],

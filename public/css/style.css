@@ -46,6 +46,7 @@ span.icon-container {
 
 div.button-bar {
   text-align: left;
+  margin-bottom: 10px;
 }
 
 div.form-offset {
@@ -54,4 +55,14 @@ div.form-offset {
 
 .margin-top-reset {
   margin-top: 0;
+}
+
+ul.address-lines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.address-lines .address-edit, .margin-bottom-space {
+  margin-bottom: 5px;
 }
