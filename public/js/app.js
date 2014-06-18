@@ -58,16 +58,29 @@ app.directive('imageFallback', function() {
   var exports = {};
 
   function link (scope, element, attrs) {
-    var template = '<div>';
+    var template = '<div class="in-line-container">';
     var newElement;
+    var displayValue;
+    var options;
 
-    if (attrs.editType === 'select') {
-      template += '<div ng-hide="editing">{{displayValue}}</div>';
-      template += '<select ng-show="editing" ng-model="value" class="form-control" ng-options="o.name for o in _options"></select>';
-    }
-    else {
-      template += '<div ng-hide="editing">{{value}}</div>';
-      template += '<input ng-show="editing" type="text" class="form-control" ng-model="value">';
+    switch (attrs.editType) {
+    case 'select':
+      displayValue = attrs.displayValue ? 'displayValue' : 'value';
+      options = attrs.editOption;
+      options = options.replace(attrs.editList, 'editList');
+
+      template += '<div class="in-line-value" ng-hide="editing">{{' + displayValue + '}}</div>';
+      template += '<select class="in-line-input form-control" ng-show="editing" ng-model="value" ng-options="'+ options +'"></select>';
+
+      break;
+    case 'number':
+      template += '<div class="in-line-value" ng-hide="editing">{{value}}</div>';
+      template += '<input class="in-line-input form-control" ng-show="editing" type="number" ng-model="value" step="any" min="0" max="99999" />'
+
+      break;
+    default:
+      template += '<div class="in-line-value" ng-hide="editing">{{value}}</div>';
+      template += '<input class="in-line-input form-control" ng-show="editing" type="text" ng-model="value" />';
     }
 
     // close the outer div
@@ -83,10 +96,10 @@ app.directive('imageFallback', function() {
   }
 
   exports.scope = {
-    value: '=value',
-    editing: '=editing',
-    _options: '=options',
-    displayValue: '=displayValue'
+    value: '=',
+    editing: '=',
+    editList: '=',
+    displayValue: '='
   };
   exports.restrict = 'E';
   exports.link = link;

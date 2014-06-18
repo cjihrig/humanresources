@@ -63,6 +63,10 @@ ul.address-lines {
   padding: 0;
 }
 
-ul.address-lines .address-edit, .margin-bottom-space {
+ul.address-lines div.address-edit, .margin-bottom-space {
+  margin-bottom: 5px;
+}
+
+ul.address-lines .in-line-input {
   margin-bottom: 5px;
 }
