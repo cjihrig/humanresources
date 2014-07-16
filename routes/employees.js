@@ -11,8 +11,6 @@ router.get('/employees', function(req, res, next) {
       return next(error);
     }
 
-
-
     // Respond with valid data
     res.json(results);
   });

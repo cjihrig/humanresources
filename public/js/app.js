@@ -180,17 +180,14 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'Te
   $scope.address.addLine = function (index) {
     var lines = $scope.employee.address.lines;
 
-    lines.splice(index + 1, 0, "");
-
+    lines.splice(index + 1, 0, '');
   }
 
   $scope.address.removeLine = function (index) {
     var lines = $scope.employee.address.lines;
 
-    lines.splice(index,1);
+    lines.splice(index, 1);
   }
-
-
 }]);
 
 
