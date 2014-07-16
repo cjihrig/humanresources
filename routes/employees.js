@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var Employee = mongoose.model('Employee');
 var Team = mongoose.model('Team');
 var router = express.Router();
-var Async = require('async');
+
 
 router.get('/employees', function(req, res, next) {
   Employee.find().sort('name.last').exec(function(error, results) {

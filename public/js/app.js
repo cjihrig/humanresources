@@ -1,5 +1,8 @@
 'use strict';
-var app = angular.module('app', ['ngRoute', 'ngResource']);
+var app = angular.module('app', ['ngRoute', 'ngResource'])
+  .constant('config', {
+    states: ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY']
+  });
 
 
 app.config(['$routeProvider', function($routeProvider) {
@@ -52,33 +55,51 @@ app.directive('imageFallback', function() {
     }
   };
 }).directive('editInLine', function ($compile) {
+  var exports = {};
 
   function link (scope, element, attrs) {
-    var template = '<div>';
+    var template = '<div class="in-line-container">';
     var newElement;
+    var displayValue;
+    var options;
 
-    if (attrs.editType === 'select') {
-      template += '<div ng-hide="editing">{{displayValue}}</div>';
-      template += '<select ng-show="editing" ng-model="value" class="form-control" ng-options="o.name for o in _options"></select>';
-    }
-    else {
-      template += '<div ng-hide="editing">{{value}}</div>';
-      template += '<input ng-show="editing" type="text" class="form-control" ng-model="value">';
+    switch (attrs.editType) {
+    case 'select':
+      displayValue = attrs.displayValue ? 'displayValue' : 'value';
+      options = attrs.editOption;
+      options = options.replace(attrs.editList, 'editList');
+
+      template += '<div class="in-line-value" ng-hide="editing">{{' + displayValue + '}}</div>';
+      template += '<select class="in-line-input form-control" ng-show="editing" ng-model="value" ng-options="'+ options +'"></select>';
+
+      break;
+    case 'number':
+      template += '<div class="in-line-value" ng-hide="editing">{{value}}</div>';
+      template += '<input class="in-line-input form-control" ng-show="editing" type="number" ng-model="value" step="any" min="0" max="99999" />'
+
+      break;
+    default:
+      template += '<div class="in-line-value" ng-hide="editing">{{value}}</div>';
+      template += '<input class="in-line-input form-control" ng-show="editing" type="text" ng-model="value" />';
     }
 
     // close the outer div
     template += '</div>';
     newElement = $compile(template)(scope);
     element.replaceWith(newElement);
+
+    scope.$on('$destroy', function () {
+      newElement = undefined;
+      element = undefined;
+    });
+
   }
 
-  var exports = {};
-
   exports.scope = {
-    value: '=value',
-    editing: '=editing',
-    _options: '=options',
-    displayValue: '=displayValue'
+    value: '=',
+    editing: '=',
+    editList: '=',
+    displayValue: '='
   };
   exports.restrict = 'E';
   exports.link = link;
@@ -99,8 +120,10 @@ app.controller('EmployeesCtrl', ['$scope', 'EmployeeService', function($scope, s
 }]);
 
 
-app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'TeamService', '$q',
-  function($scope, $routeParams, employee, team, $q) {
+app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'TeamService', '$q', 'config', '$route',
+  function($scope, $routeParams, employee, team, $q, config, $route) {
+
+    $scope.address = {};
 
     function getTeam (teams, teamId) {
       for (var i = 0, l = teams.length; i < l; ++i) {
@@ -123,11 +146,26 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'Te
   }).catch(_handleError);
 
   $scope.editing = false;
+  // to prevent multiple refereces to the same array, give us a new copy of it.
+  $scope.states = config.states.slice(0);
+
   $scope.edit = function() {
     $scope.editing = !$scope.editing;
   };
 
   $scope.save = function() {
+    //to prevent empty lines geting to the database and also to keep the UI clean
+    // remove any blank lines
+    var lines = $scope.employee.address.lines;
+
+    if (lines.length) {
+      lines = lines.filter(function (value) {
+        return value;
+      });
+    }
+
+    $scope.employee.address.lines = lines;
+
     employee.update({
       employeeId: $routeParams.employeeId
     }, $scope.employee, function() {
@@ -135,6 +173,21 @@ app.controller('EmployeeCtrl', ['$scope', '$routeParams', 'EmployeeService', 'Te
     });
   };
 
+  $scope.cancel = function () {
+    $route.reload();
+  }
+
+  $scope.address.addLine = function (index) {
+    var lines = $scope.employee.address.lines;
+
+    lines.splice(index + 1, 0, '');
+  }
+
+  $scope.address.removeLine = function (index) {
+    var lines = $scope.employee.address.lines;
+
+    lines.splice(index, 1);
+  }
 }]);
 
 
