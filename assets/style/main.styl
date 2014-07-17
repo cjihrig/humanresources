@@ -1,0 +1,72 @@
+@import 'nib'
+
+space = 5px;
+
+body {
+	background: url('/images/background.png');
+	background-repeat: repeat;
+	min-width: 320px;
+}
+
+ul.nav.nav-pills {
+	margin: 2 * space 0;
+	background-color: #fff;
+}
+
+.employee-list-item .panel-body {
+	display: flex;
+
+	> * {
+		align-self: center;
+	}
+
+	.btn {
+		margin-left: auto;
+	}
+}
+
+.employee-avatar {
+	height: 200px;
+	width: @height;
+	border-radius: 6px;
+}
+
+span.icon-container {
+	display: inline-block;
+	text-align: center;
+	width: 48px;
+	height: 48px;
+	border: 1px solid #3498db;
+	margin-right: 3 * space;
+	border-radius: 4px;
+}
+
+div.button-bar {
+	text-align: left;
+	margin-bottom: 2 * space;
+}
+
+div.form-offset {
+	padding-top: 3 * space;
+}
+
+.margin-top-reset {
+	margin-top: 0;
+}
+
+ul.address-lines {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	.in-line-input {
+		margin-bottom: space;
+	}
+	div.address-edit {
+		margin-bottom: space;
+	}
+}
+
+.margin-bottom-space {
+	margin-bottom: space;
+}
