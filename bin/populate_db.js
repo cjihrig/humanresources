@@ -57,7 +57,7 @@ var data = {
         lines: ['3803 Forbes Ave'],
         city: 'Pittsburgh',
         state: 'PA',
-        zip: 15213  
+        zip: 15213
       }
     },
     {
@@ -70,7 +70,7 @@ var data = {
         lines: ['8651 University Blvd'],
         city: 'Pittsburgh',
         state: 'PA',
-        zip: 15108  
+        zip: 15108
       }
     },
     {
@@ -83,7 +83,7 @@ var data = {
         lines: ['1539 Washington Rd'],
         city: 'Mt Lebanon',
         state: 'PA',
-        zip: 15228  
+        zip: 15228
       }
     }
   ],
@@ -111,19 +111,7 @@ var deleteEmployees = function(callback) {
 
 var addEmployees = function(callback) {
   console.info('Adding employees');
-  async.each(data.employees, function(emp, callback) {
-    var employee = new Employee(emp);
-
-    console.info('Adding employee ' + emp.id);
-    employee.save(function(error) {
-      if (error) {
-        console.error('Error adding employee: ' + error);
-      }
-
-      emp._id = employee._id;
-      callback();
-    });
-  }, function(error) {
+  Employee.create(data.employees, function (error) {
     if (error) {
       console.error('Error: ' + error);
     }
@@ -147,22 +135,11 @@ var deleteTeams = function(callback) {
 
 var addTeams = function(callback) {
   console.info('Adding teams');
-  async.each(data.teams, function(t, callback) {
-    console.info('Adding team ' + t.name);
-
-    var team = new Team(t);
-
-    team.save(function(error) {
-      if (error) {
-        console.error('Error adding team: ' + error);
-      }
-
-      t._id = team._id;
-      callback();
-    });
-  }, function(error) {
+  Team.create(data.teams, function (error, team1) {
     if (error) {
-      console.error('Error: ' + error);
+        console.error('Error: ' + error);
+    } else {
+        data.team_id = team1._id;
     }
 
     console.info('Done adding teams');
@@ -174,9 +151,9 @@ var updateEmployeeTeams = function (callback) {
   console.info('Updating employee teams');
   var team = data.teams[0];
 
-  // Set everyone to be on the same team to start  
+  // Set everyone to be on the same team to start
   Employee.update({}, {
-    team: team._id
+    team: data.team_id
   }, {
     multi: true
   }, function (error, numberAffected, response) {
