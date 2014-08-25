@@ -8,5 +8,5 @@ pids
 *.seed
 .grunt
 node_modules
-public/javascript
-public/css
+public/javascript/*
+public/css/*
