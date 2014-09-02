@@ -1,3 +1,7 @@
+@import 'nib'
+
+space = 5px;
+
 body {
   background: url('/images/background.png');
   background-repeat: repeat;
@@ -5,32 +9,25 @@ body {
 }
 
 ul.nav.nav-pills {
-  margin: 10px 0;
+  margin: 2 * space 0;
   background-color: #fff;
 }
 
 .employee-list-item .panel-body {
-  display: -webkit-box;
-  display: -moz-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: box;
   display: flex;
-}
 
-.employee-list-item .panel-body > * {
-  -webkit-align-self: center;
-  align-self: center;
-  -ms-flex-item-align: center;
-}
+  > * {
+    align-self: center;
+  }
 
-.employee-list-item .panel-body .btn {
-  margin-left: auto;
+  .btn {
+    margin-left: auto;
+  }
 }
 
 .employee-avatar {
   height: 200px;
-  width: 200px;
+  width: @height;
   border-radius: 6px;
 }
 
@@ -40,17 +37,17 @@ span.icon-container {
   width: 48px;
   height: 48px;
   border: 1px solid #3498db;
-  margin-right: 15px;
+  margin-right: 3 * space;
   border-radius: 4px;
 }
 
 div.button-bar {
   text-align: left;
-  margin-bottom: 10px;
+  margin-bottom: 2 * space;
 }
 
 div.form-offset {
-  padding-top: 15px;
+  padding-top: 3 * space;
 }
 
 .margin-top-reset {
@@ -61,12 +58,15 @@ ul.address-lines {
   list-style: none;
   margin: 0;
   padding: 0;
+
+  .in-line-input {
+    margin-bottom: space;
+  }
+  div.address-edit {
+    margin-bottom: space;
+  }
 }
 
-ul.address-lines div.address-edit, .margin-bottom-space {
-  margin-bottom: 5px;
-}
-
-ul.address-lines .in-line-input {
-  margin-bottom: 5px;
+.margin-bottom-space {
+  margin-bottom: space;
 }
