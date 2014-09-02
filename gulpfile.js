@@ -32,10 +32,10 @@ gulp.task('css', function() {
 
 gulp.task('default', function() {
   gulp.start('javascript');
-	gulp.start('css');
+  gulp.start('css');
 });
 
 gulp.task('watch', function() {
   gulp.watch('assets/javascript/*.js', ['javascript']);
-	gulp.watch('assets/style/*.styl', ['css']);
+  gulp.watch('assets/style/*.styl', ['css']);
 });
